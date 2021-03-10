@@ -1,18 +1,59 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from playsound import playsound
+import tweepy
+import time
+import json
 
-url = "https://rowanmedicine.com/vaccine/registration.html"
+key_file = 'keys.json'
+with open(key_file) as f:
+    keys = json.load(f)
+
+auth = tweepy.OAuthHandler(keys["consumer_key"], keys["consumer_secret"])
+auth.set_access_token(keys["access_token"], keys["access_token_secret"])
+api = tweepy.API(auth)
+
+url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
 
 chrome_options = Options()
-chrome_options.add_argument('--headless')
+#chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+while True:
 
-driver.get(url)
-driver.implicitly_wait(.25)
-frame = driver.find_element_by_xpath('/html/body/div/div/div[2]/main/div[3]/div/div/iframe')
-driver.switch_to.frame(frame)
+    driver.get(url)
+    time.sleep(2)
+    mainFrame = WebDriverWait(driver, 4).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="main"]'))
+    )
+    
+    try:
+        element = WebDriverWait(driver, 3).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div'))
+    )
+    except:
+        continue
+    
+    driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div')
+    playsound('Beep.m4a')
+    playsound('Beep.m4a')
+    playsound('Beep.m4a')
+    driver.get_screenshot_as_file("HMHNcapture.png")
 
-element = driver.find_element_by_xpath('//*[@id="no-times-available-message"]')
+    status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
+    imagePath = "HMHNcapture.png"
 
-driver.execute_script("arguments[0].scrollIntoView();", element)
-driver.get_screenshot_as_file("capture.png")
+    api.update_with_media(imagePath, status)
+    break
+
+
+
+#frame = driver.find_element_by_xpath('/html/body/div/div/div[2]/main/div[3]/div/div/iframe')
+#driver.switch_to.frame(frame)
+
+#element = driver.find_element_by_xpath('//*[@id="no-times-available-message"]')
+
+#driver.execute_script("arguments[0].scrollIntoView();", element)
+#driver.get_screenshot_as_file("capture.png")
