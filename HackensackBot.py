@@ -21,20 +21,26 @@ headers = {'User-Agent': 'Mozilla/5.0'}
 
 page = requests.get(hmhn_URL, headers=headers)
 soup = BeautifulSoup(page.text, 'html.parser')
+checkStr = "Please check back in a bit."
 
 while True:
 
-    if not soup.find_all("div", {"class": "errormessage"}) and not soup.find_all("div", {"class": "AjaxErrorHandler Popup container component small notoolbar"}):
+    if soup.find_all("div", {"class": "slotslist hasScrollIndicator"}):
         # Appointments Open -- Post Tweet
         
         if time.time() - hmhn_timer > 480 or hmhn_timer == 0: 
-            api.update_status("Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916")
-
             # Test Beeps
-            playsound('Beep.m4a')
-            playsound('Beep.m4a')
-            playsound('Beep.m4a')
-            hmhn_timer = time.time()
+            #playsound('Beep.m4a')
+            #playsound('Beep.m4a')
+            #playsound('Beep.m4a')
 
-    page = requests.get(hmhn_URL, headers=headers)
-    soup = BeautifulSoup(page.text, 'html.parser')
+            api.update_status("Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916")
+            hmhn_timer = time.time()
+            print(f"HMHN Appointment found at {hmhn_timer}")
+    try:
+        page = requests.get(hmhn_URL, headers=headers)
+        soup = BeautifulSoup(page.text, 'html.parser')
+    except:
+        time.sleep(3)
+        continue
+    

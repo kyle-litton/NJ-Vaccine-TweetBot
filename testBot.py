@@ -1,25 +1,18 @@
-import requests
-import csv
-import time
-from bs4 import BeautifulSoup
-from playsound import playsound
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
-url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
+url = "https://rowanmedicine.com/vaccine/registration.html"
 
-# Headers to mimic a browser visit
-headers = {'User-Agent': 'Mozilla/5.0'}
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
 
-page = requests.get(url, headers=headers)
-soup = BeautifulSoup(page.text, 'html.parser')
+driver.get(url)
+driver.implicitly_wait(.25)
+frame = driver.find_element_by_xpath('/html/body/div/div/div[2]/main/div[3]/div/div/iframe')
+driver.switch_to.frame(frame)
 
+element = driver.find_element_by_xpath('//*[@id="no-times-available-message"]')
 
-while True:
-
-    if not soup.find_all("div", {"class": "errormessage"}) and not soup.find_all("div", {"class": "AjaxErrorHandler Popup container component small notoolbar"}):
-        playsound('Beep.m4a')
-        playsound('Beep.m4a')
-        playsound('Beep.m4a')
-
-    page = requests.get(url, headers=headers)
-    soup = BeautifulSoup(page.text, 'html.parser')
-    
+driver.execute_script("arguments[0].scrollIntoView();", element)
+driver.get_screenshot_as_file("capture.png")
