@@ -25,28 +25,26 @@ while True:
 
     driver.get(url)
     time.sleep(2)
-    mainFrame = WebDriverWait(driver, 4).until(
+    mainFrame = WebDriverWait(driver, 2).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="main"]'))
     )
     
     try:
-        element = WebDriverWait(driver, 3).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div'))
+        element = WebDriverWait(driver, 2).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]'))
     )
     except:
         continue
     
-    driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div')
-    playsound('Beep.m4a')
-    playsound('Beep.m4a')
-    playsound('Beep.m4a')
-    driver.get_screenshot_as_file("HMHNcapture.png")
+    if element.get_attribute("class") == 'openingsData':
+        playsound('Beep.m4a')
+        driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
 
-    status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
-    imagePath = "HMHNcapture.png"
+        status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
+        imagePath = "Screenshots/HMHNcapture.png"
 
-    api.update_with_media(imagePath, status)
-    break
+        api.update_with_media(imagePath, status)
+        break
 
 
 
