@@ -21,33 +21,63 @@ url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=
 chrome_options = Options()
 #chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+
+HMHN_Timer = 0
+
+print("Searching for appointments...")
 while True:
 
     driver.get(url)
-    time.sleep(2)
-    mainFrame = WebDriverWait(driver, 2).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="main"]'))
-    )
+    time.sleep(3)
+
+    # Check if the main tag is there, avoids the high traffic page and makes the other tags readable
+    try:
+        mainFrame = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="main"]'))
+        )
+    except:
+        time.sleep(5)
+        driver.delete_all_cookies()
+        continue
     
+    # Find the OpeningsData div, used to check whether any open appointments
     try:
         element = WebDriverWait(driver, 2).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]'))
     )
     except:
         continue
-    
-    if element.get_attribute("class") == 'openingsData':
-        playsound('Beep.m4a')
-        driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
 
-        status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
-        imagePath = "Screenshots/HMHNcapture.png"
+    try:
+        # This element is used to prevent case of loading heart in screenshot
+        heart = driver.find_element_by_xpath('/html/body/div[12]')
 
-        api.update_with_media(imagePath, status)
-        break
+            # Final check to make sure there are appointments and no loading heart
+        try:
+            element.find_element_by_class_name("slotslist hasScrollIndicator")
+            if heart.get_attribute("class") == 'ajaxspinner defaultajaxoverlay hidden':
+                playsound('Beep.m4a')
+                driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
+
+                status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
+                imagePath = "Screenshots/HMHNcapture.png"
+
+                # Only tweet again after 8 min
+                
+
+                print("Appointment found.")
+                api.update_with_media(imagePath, status)
+                HMHN_Timer = time.time()
+
+                break
+        except:
+            continue
+
+    except:
+        continue
 
 
-
+# TODO use this for rowan website
 #frame = driver.find_element_by_xpath('/html/body/div/div/div[2]/main/div[3]/div/div/iframe')
 #driver.switch_to.frame(frame)
 
