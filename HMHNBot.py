@@ -21,6 +21,7 @@ url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=
 
 chrome_options = Options()
 #chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
 
 HMHN_Timer = 0
@@ -28,9 +29,13 @@ HMHN_Timer = 0
 print("Searching for appointments...")
 while True:
 
-    driver.delete_all_cookies()
-    driver.get(url)
-    time.sleep(random.uniform(2.8,3.6))
+    try:
+        driver.delete_all_cookies()
+        driver.get(url)
+        time.sleep(random.uniform(2.8,3.6))
+    except:
+        time.sleep(random.uniform(120,150))
+        continue
 
     # Check if the main tag is there, avoids the high traffic page and makes the other tags readable
     try:
