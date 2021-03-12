@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from playsound import playsound
 import tweepy
+import random
 import time
 import json
 
@@ -29,11 +30,11 @@ while True:
 
     driver.delete_all_cookies()
     driver.get(url)
-    time.sleep(3)
+    time.sleep(random.uniform(2.8,3.6))
 
     # Check if the main tag is there, avoids the high traffic page and makes the other tags readable
     try:
-        mainFrame = WebDriverWait(driver, 2).until(
+        mainFrame = WebDriverWait(driver, random.uniform(1.7,2.2)).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="main"]'))
         )
     except:
@@ -42,7 +43,7 @@ while True:
     
     # Find the OpeningsData div, used to check whether any open appointments
     try:
-        element = WebDriverWait(driver, 2).until(
+        element = WebDriverWait(driver, random.uniform(1.7,2.2)).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]'))
     )
     except:
