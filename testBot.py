@@ -27,6 +27,7 @@ HMHN_Timer = 0
 print("Searching for appointments...")
 while True:
 
+    driver.delete_all_cookies()
     driver.get(url)
     time.sleep(3)
 
@@ -37,7 +38,6 @@ while True:
         )
     except:
         time.sleep(5)
-        driver.delete_all_cookies()
         continue
     
     # Find the OpeningsData div, used to check whether any open appointments
@@ -54,10 +54,8 @@ while True:
 
             # Final check to make sure there are appointments and no loading heart
         try:
-            # TODO get the slotlist element by xpath then check if the class name is right
-            # with element.get_attribute("class") == "slotslist hasScrollIndicator"
-            element.find_element_by_class_name("slotslist hasScrollIndicator")
-            if heart.get_attribute("class") == 'ajaxspinner defaultajaxoverlay hidden':
+            slotList = driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/div/div[4]/div/div[3]')
+            if slotList.get_attribute("class") == 'slotslist hasScrollIndicator' and heart.get_attribute("class") == 'ajaxspinner defaultajaxoverlay hidden':
                 playsound('Beep.m4a')
                 driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
 
