@@ -54,6 +54,8 @@ while True:
 
             # Final check to make sure there are appointments and no loading heart
         try:
+            # TODO get the slotlist element by xpath then check if the class name is right
+            # with element.get_attribute("class") == "slotslist hasScrollIndicator"
             element.find_element_by_class_name("slotslist hasScrollIndicator")
             if heart.get_attribute("class") == 'ajaxspinner defaultajaxoverlay hidden':
                 playsound('Beep.m4a')
@@ -63,8 +65,6 @@ while True:
                 imagePath = "Screenshots/HMHNcapture.png"
 
                 # Only tweet again after 8 min
-                
-
                 print("Appointment found.")
                 api.update_with_media(imagePath, status)
                 HMHN_Timer = time.time()
