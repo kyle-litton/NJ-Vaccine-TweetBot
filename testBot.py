@@ -62,12 +62,13 @@ while True:
                 status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
                 imagePath = "Screenshots/HMHNcapture.png"
 
-                # Only tweet again after 8 min
-                print("Appointment found.")
-                api.update_with_media(imagePath, status)
-                HMHN_Timer = time.time()
+                if time.time() - HMHN_Timer > 200 or HMHN_Timer == 0:
 
-                break
+                    print("Appointment found.")
+                    api.update_with_media(imagePath, status)
+                    HMHN_Timer = time.time()
+
+                continue
         except:
             continue
 
