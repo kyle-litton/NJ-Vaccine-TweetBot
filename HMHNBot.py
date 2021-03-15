@@ -17,7 +17,7 @@ auth = tweepy.OAuthHandler(keys["consumer_key"], keys["consumer_secret"])
 auth.set_access_token(keys["access_token"], keys["access_token_secret"])
 api = tweepy.API(auth)
 
-url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
+url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916"
 
 chrome_options = Options()
 #chrome_options.add_argument('--headless')
@@ -28,13 +28,15 @@ HMHN_Timer = 0
 
 print("Searching for appointments...")
 while True:
+    #print('\n')
 
     try:
         driver.delete_all_cookies()
         driver.get(url)
-        time.sleep(random.uniform(2.8,3.6))
+        time.sleep(random.uniform(1.4,2.3))
     except:
         time.sleep(random.uniform(120,150))
+        #print("URL Did not load.")
         continue
 
     # Check if the main tag is there, avoids the high traffic page and makes the other tags readable
@@ -43,7 +45,8 @@ while True:
             EC.presence_of_element_located((By.XPATH, '//*[@id="main"]'))
         )
     except:
-        time.sleep(5)
+        time.sleep(random.uniform(3.2,4.6))
+        #print("No main tag.")
         continue
     
     # Find the OpeningsData div, used to check whether any open appointments
@@ -52,33 +55,32 @@ while True:
         EC.presence_of_element_located((By.XPATH, '//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]'))
     )
     except:
+        #print("No openings Data Div")
         continue
 
+
+    # Final check to make sure there are appointments and no loading heart
     try:
-        # This element is used to prevent case of loading heart in screenshot
-        heart = driver.find_element_by_xpath('/html/body/div[12]')
+        slotList = driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/div/div[4]/div/div')
+        if slotList.get_attribute("class") == 'slotslist hasScrollIndicator':
+            playsound('Beep.m4a')
+            driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
 
-            # Final check to make sure there are appointments and no loading heart
-        try:
-            slotList = driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/div/div[4]/div/div[3]')
-            if slotList.get_attribute("class") == 'slotslist hasScrollIndicator' and heart.get_attribute("class") == 'ajaxspinner defaultajaxoverlay hidden':
-                playsound('Beep.m4a')
-                driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
+            status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916"
+            imagePath = "Screenshots/HMHNcapture.png"
+            
 
-                status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656,1110301124&vt=112916"
-                imagePath = "Screenshots/HMHNcapture.png"
+            if time.time() - HMHN_Timer > 200 or HMHN_Timer == 0:
 
-                if time.time() - HMHN_Timer > 200 or HMHN_Timer == 0:
+                print("Appointment found.")
+                api.update_with_media(imagePath, status)
+                HMHN_Timer = time.time()
 
-                    print("Appointment found.")
-                    api.update_with_media(imagePath, status)
-                    HMHN_Timer = time.time()
-
-                continue
-        except:
             continue
+        #print("Slotlist has no scroll indicator")
 
     except:
+        #print("Slotlist not found")
         continue
 
 
