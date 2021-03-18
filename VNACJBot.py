@@ -51,7 +51,7 @@ while True:
 
     try: # Look for Step 1/13 Introduction page, if not found, continue refreshing
         registration_page = WebDriverWait(driver, 2).until(
-            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps'))
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/div[2]/button'))
         )
         
     except: # Portal not open, no appointmetns
@@ -60,24 +60,27 @@ while True:
 
 
     try: # Portal is open, click the Get Started button on the introduction page
-
+        print("trying to click button")
         # TODO click continue button here
         get_started_button = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/div[2]/button'))
         )
         get_started_button.click()
+
     
     except: # Could not click continue button
+        print("couldnt click button")
         continue
 
 
     try: # Count appointments for first location
+        print("click button worked")
         openAppts = 0
         loc1_availability_container = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]'))
         )
         openAppts += countAppointments(availability_container)
-
+        print("made it through function")
         if openAppts > 0:
             playsound('Beep.m4a')
             driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
@@ -109,11 +112,14 @@ def countAppointments(availability_container):
     col = 1
     row = 2
 
+    print("in countAppts function")
+
     num_cols = availability_container.childElementCount
 
-    col1 = WebDriverWait(driver, 2).until(
-            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]/div[1]'))
-        )
+    col1 = availability_container.find_element_by_xpath('.//div[1]')
+    #col1 = WebDriverWait(driver, 2).until(
+    #        EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]/div[1]'))
+    #    )
 
     num_rows = col1.childElementCount
   
@@ -121,9 +127,10 @@ def countAppointments(availability_container):
     while col <= num_cols:
         while row <= num_rows:
             try: # Check the background color of each appt, if green add to total
-                cur_time_slot = WebDriverWait(driver, 2).until(
-                                EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]/div[{0}]/div[{1}]/div'.format(num_col, num_row)))
-                            )
+                cur_time_slot = availability_container.find_element_by_xpath('.//div[{0}]/div[{1}]/div'.format(num_col, num_row))
+                #cur_time_slot = WebDriverWait(driver, 2).until(
+                #                EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]/div[{0}]/div[{1}]/div'.format(num_col, num_row)))
+                #            )
                 button_color = Color.from_string(cur_time_slot.value_of_css_property('background-color'))
   
                 if button_color == GREEN_COLOR:
