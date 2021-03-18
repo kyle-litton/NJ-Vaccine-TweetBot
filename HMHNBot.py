@@ -33,7 +33,7 @@ while True:
     try:
         driver.delete_all_cookies()
         driver.get(url)
-        time.sleep(random.uniform(1.4,2.3))
+        time.sleep(random.uniform(2.4,3.3))
     except:
         time.sleep(random.uniform(120,150))
         #print("URL Did not load.")
@@ -63,18 +63,19 @@ while True:
     try:
         slotList = driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/div/div[4]/div/div')
         if slotList.get_attribute("class") == 'slotslist hasScrollIndicator':
-            playsound('Beep.m4a')
+ 
             driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
 
-            status = "Hackensack Meridian: Portal is open at this link https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916"
+            status = "Hackensack Meridian: Portal is open at this link (Keep refreshing!) https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916"
             imagePath = "Screenshots/HMHNcapture.png"
             
 
-            if time.time() - HMHN_Timer > 200 or HMHN_Timer == 0:
+            if time.time() - HMHN_Timer > 150 or HMHN_Timer == 0:
 
                 print("Appointment found.")
                 api.update_with_media(imagePath, status)
                 HMHN_Timer = time.time()
+                playsound('Beep.m4a')
 
             continue
         #print("Slotlist has no scroll indicator")
@@ -82,13 +83,3 @@ while True:
     except:
         #print("Slotlist not found")
         continue
-
-
-# TODO use this for rowan website
-#frame = driver.find_element_by_xpath('/html/body/div/div/div[2]/main/div[3]/div/div/iframe')
-#driver.switch_to.frame(frame)
-
-#element = driver.find_element_by_xpath('//*[@id="no-times-available-message"]')
-
-#driver.execute_script("arguments[0].scrollIntoView();", element)
-#driver.get_screenshot_as_file("capture.png")
