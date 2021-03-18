@@ -50,39 +50,90 @@ while True:
     
 
     try: # Look for Step 1/13 Introduction page, if not found, continue refreshing
-        element = WebDriverWait(driver, 2).until(
+        registration_page = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps'))
         )
-
-        playsound('Beep.m4a')
-        driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
-
-        status = "VNACJ: Portal is open at this link https://curogram.com/registrations/5fe2fe643b4a850044b0b3b1"
-        imagePath = "Screenshots/VNACJcapture.png"
-
-        print(element.get_attribute("class"))
-
-        # TODO uncomment once we have it fully working
-        # api.update_with_media(imagePath, status)
-        break
         
     except: # Portal not open, no appointmetns
-        print("portnal not open")
+        print("portal not open")
         continue
 
 
-    #TODO try: # Portal is open, click the continue button on the introduction page
+    try: # Portal is open, click the Get Started button on the introduction page
 
         # TODO click continue button here
+        get_started_button = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/div[2]/button'))
+        )
+        get_started_button.click()
     
-    #except: # Could not click continue button
-        #continue
+    except: # Could not click continue button
+        continue
+
+
+    try: # Count appointments for first location
+        openAppts = 0
+        loc1_availability_container = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]'))
+        )
+        openAppts += countAppointments(availability_container)
+
+        if openAppts > 0:
+            playsound('Beep.m4a')
+            driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
+
+            status = "VNACJ: Portal is open at this link https://curogram.com/registrations/5fe2fe643b4a850044b0b3b1"
+            imagePath = "Screenshots/VNACJcapture.png"
+
+            print(element.get_attribute("class"))
+
+            # TODO uncomment once we have it fully working
+            # api.update_with_media(imagePath, status)
+            break
+        
+    except:
+        continue
+
+
+
+    # TODO count appointments for the other 2 locations too
 
 
 
 
 
+def countAppointments(availability_container):
+    # TODO get the correct green color vvvvvvv and update this placeholder
+    GREEN_COLOR = Color.from_string('#2F7ED8')
+    total = 0
+    col = 1
+    row = 2
 
+    num_cols = availability_container.childElementCount
+
+    col1 = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]/div[1]'))
+        )
+
+    num_rows = col1.childElementCount
+  
+
+    while col <= num_cols:
+        while row <= num_rows:
+            try: # Check the background color of each appt, if green add to total
+                cur_time_slot = WebDriverWait(driver, 2).until(
+                                EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]/div[{0}]/div[{1}]/div'.format(num_col, num_row)))
+                            )
+                button_color = Color.from_string(cur_time_slot.value_of_css_property('background-color'))
+  
+                if button_color == GREEN_COLOR:
+                    total+=1
+            except:
+                continue
+            row+=1
+        col+=1
+
+    return total
 
 
 
