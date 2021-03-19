@@ -31,9 +31,9 @@ while True:
     #print('\n')
 
     try:
+        time.sleep(random.uniform(2.4,3.9))
         driver.delete_all_cookies()
         driver.get(url)
-        time.sleep(random.uniform(2.4,3.3))
     except:
         time.sleep(random.uniform(120,150))
         #print("URL Did not load.")
