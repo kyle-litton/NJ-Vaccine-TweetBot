@@ -66,7 +66,7 @@ while True:
  
             driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
 
-            status = "Hackensack Meridian: Portal is open at this link (Keep refreshing!) https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916"
+            status = "Hackensack Meridian: Portal is open at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!"
             imagePath = "Screenshots/HMHNcapture.png"
             
 
