@@ -25,20 +25,22 @@ def countAppointments(availability_container):
 
     #vvvv all time slots + headers all_cols/2 - number of headers
     num_rows = (int(len(all_cols))/2 - num_cols) / num_cols
-
-    for col in all_cols:
+    
+    while col <= num_cols:
         while row <= num_rows:
             try: # Check the background color of each appt, if green add to total
-  
-                cur_time_slot = col.find_element_by_xpath('.//div[{0}]/div'.format(row))
+                cur_time_slot = availability_container.find_element_by_xpath('.//div[{0}]/div[{1}]/div'.format(col, row))
                 button_color = Color.from_string(cur_time_slot.value_of_css_property('background-color'))
+              
                 if button_color != GREY_COLOR:
                     total+=1
             except:
                 row+=1
                 continue
             row+=1
-    #print(total)
+        row = 2
+        col+=1
+ 
     return total
 
 
@@ -134,8 +136,11 @@ while True:
         openAppts += countAppointments(loc1_availability_container)
         #print("line 128")
         if openAppts > 0:
-            print("i found open appts:")
+            print("i found")
             print(openAppts)
+            print("open appts at:")
+            print(loc_1)
+            
             
             driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
 
