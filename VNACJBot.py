@@ -77,6 +77,7 @@ while True:
         root = WebDriverWait(driver, random.uniform(1.7,2.2)).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/curo-root'))
         )
+
     except:
         time.sleep(random.uniform(3.2,4.6))
         #print("No root tag.")
@@ -148,7 +149,7 @@ while True:
             imagePath = "Screenshots/VNACJcapture.png"
 
             playsound('Beep.m4a')
-
+            print("after beep")
             # TODO uncomment once we have it fully working
             # api.update_with_media(imagePath, status)
             break
