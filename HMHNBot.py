@@ -96,7 +96,7 @@ while True:
                     HMHN_Timer = time.time()
                     playsound('Beep.m4a')
 
-            break
+            continue
         #print("Slotlist has no scroll indicator")
 
     except:
