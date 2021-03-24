@@ -21,6 +21,7 @@ url = "https://www.co.monmouth.nj.us/page.aspx?ID=1932"
 
 chrome_options = Options()
 #chrome_options.add_argument('--headless')
+#chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
 

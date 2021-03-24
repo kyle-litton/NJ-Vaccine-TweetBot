@@ -21,8 +21,13 @@ url = "https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=
 
 chrome_options = Options()
 #chrome_options.add_argument('--headless')
+#chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+
+# Set up clear cache
+send_command = ('POST', '/session/$sessionId/chromium/send_command')
+driver.command_executor._commands['SEND_COMMAND'] = send_command
 
 HMHN_Timer = 0
 
@@ -31,9 +36,10 @@ while True:
     #print('\n')
 
     try:
-        time.sleep(random.uniform(2.4,3.9))
         driver.delete_all_cookies()
+        driver.execute('SEND_COMMAND', dict(cmd='Network.clearBrowserCache', params={}))
         driver.get(url)
+        time.sleep(random.uniform(1.4,2.4))
     except:
         time.sleep(random.uniform(120,150))
         #print("URL Did not load.")
@@ -70,12 +76,16 @@ while True:
             imagePath = "Screenshots/HMHNcapture.png"
             
 
-            if time.time() - HMHN_Timer > 150 or HMHN_Timer == 0:
+            if time.time() - HMHN_Timer > 240 or HMHN_Timer == 0:
 
-                print("Appointment found.")
-                api.update_with_media(imagePath, status)
-                HMHN_Timer = time.time()
-                playsound('Beep.m4a')
+                try:
+                    err_popup_msg = driver.find_element_by_xpath('/html/body/div[14]/div[2]/div/div[1]/p')
+                    print(err_popup_msg.text)
+                except:
+                    api.update_with_media(imagePath, status)
+                    print("Appointment found.")
+                    HMHN_Timer = time.time()
+                    playsound('Beep.m4a')
 
             continue
         #print("Slotlist has no scroll indicator")
