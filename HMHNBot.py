@@ -89,7 +89,7 @@ while True:
                         status = 'Hackensack Meridian: Portal is open at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n{0} Appointments open.\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!'.format(numAppointments)
                         api.update_with_media(imagePath, status)
                     else:
-                        status = 'Hackensack Meridian: 1 Cancellation found at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\n Cancellations go VERY quickly, good luck!!'
+                        status = 'Hackensack Meridian: 1 Cancellation found at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nCancellations go VERY quickly, good luck!!'
                         api.update_with_media(imagePath, status)
                         
                     print('{0} appointment(s) found.'.format(numAppointments))
