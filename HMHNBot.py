@@ -71,8 +71,6 @@ while True:
         if slotList.get_attribute("class") == 'slotslist hasScrollIndicator':
  
             driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
-
-            status = "Hackensack Meridian: Portal is open at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!"
             imagePath = "Screenshots/HMHNcapture.png"
             
 
@@ -81,13 +79,24 @@ while True:
                 try:
                     err_popup_msg = driver.find_element_by_xpath('/html/body/div[14]/div[2]/div/div[1]/p')
                     print(err_popup_msg.text)
+                    continue
                 except:
-                    api.update_with_media(imagePath, status)
-                    print("Appointment found.")
+
+                    # Get num appointments
+                    numAppointments = len(slotList.find_elements_by_tag_name('a'))
+
+                    if numAppointments > 1:
+                        status = 'Hackensack Meridian: Portal is open at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n{0} Appointments open.\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!'.format(numAppointments)
+                        api.update_with_media(imagePath, status)
+                    else:
+                        status = 'Hackensack Meridian: 1 Cancellation found at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\n Cancellations go VERY quickly, good luck!!'
+                        api.update_with_media(imagePath, status)
+                        
+                    print('{0} appointment(s) found.'.format(numAppointments))
                     HMHN_Timer = time.time()
                     playsound('Beep.m4a')
 
-            continue
+            break
         #print("Slotlist has no scroll indicator")
 
     except:
