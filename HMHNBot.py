@@ -77,7 +77,7 @@ while True:
             if time.time() - HMHN_Timer > 240 or HMHN_Timer == 0:
 
                 # Get num appointments
-                numAppointments = len(slotList.find_elements_by_tag_name('a'))
+                numAppointments = len(set(slotList.find_elements_by_tag_name('a')))
 
                 if numAppointments > 1:
                     status = 'Hackensack Meridian: {0} time slots available, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!'.format(numAppointments)
