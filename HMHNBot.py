@@ -76,25 +76,31 @@ while True:
 
             if time.time() - HMHN_Timer > 240 or HMHN_Timer == 0:
 
-                try:
-                    err_popup_msg = driver.find_element_by_xpath('/html/body/div[14]/div[2]/div/div[1]/p')
-                    print(err_popup_msg.text)
-                    continue
-                except:
+                # Get num appointments
+                numAppointments = len(slotList.find_elements_by_tag_name('a'))
 
-                    # Get num appointments
-                    numAppointments = len(slotList.find_elements_by_tag_name('a'))
-
-                    if numAppointments > 1:
-                        status = 'Hackensack Meridian: Portal is open at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n{0} Appointments open.\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!'.format(numAppointments)
+                if numAppointments > 1:
+                    status = 'Hackensack Meridian: {0} time slots available, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nChoose guest, use auto-fill, and select no insurance to complete the form ASAP! Keep refreshing!'.format(numAppointments)
+                    try:
+                        err_popup_msg = driver.find_element_by_xpath('/html/body/div[14]/div[2]/div/div[1]/p')
+                        print(err_popup_msg.text)
+                        continue
+                    except:
+                        HMHN_Timer = time.time()
                         api.update_with_media(imagePath, status)
-                    else:
-                        status = 'Hackensack Meridian: 1 Cancellation found at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nCancellations go VERY quickly, good luck!!'
+                        print('{0} appointment(s) found.'.format(numAppointments))
+                        playsound('Beep.m4a')
+                else:
+                    status = 'Hackensack Meridian: 1 Cancellation found at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nCancellations go VERY quickly, good luck!!'
+                    try:
+                        err_popup_msg = driver.find_element_by_xpath('/html/body/div[14]/div[2]/div/div[1]/p')
+                        print(err_popup_msg.text)
+                        continue
+                    except:
+                        HMHN_Timer = time.time()
                         api.update_with_media(imagePath, status)
-                        
-                    print('{0} appointment(s) found.'.format(numAppointments))
-                    HMHN_Timer = time.time()
-                    playsound('Beep.m4a')
+                        print('{0} appointment(s) found.'.format(numAppointments))
+                        playsound('Beep.m4a')    
 
             continue
         #print("Slotlist has no scroll indicator")
