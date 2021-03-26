@@ -52,22 +52,19 @@ while True:
 
 
         try:
-            msg = driver.find_element_by_xpath('//*[@id="Panel2"]/p')
-            if 'at this time all appointments have been taken.' not in msg.text:
-                driver.get_screenshot_as_file("Screenshots/Monmouthcapture.png")
+            msg = driver.find_element_by_xpath('//*[@id="Button1"]')
+                     
+            driver.get_screenshot_as_file("Screenshots/Monmouthcapture.png")
 
-                status = 'Monmouth county residents only: Monmouth County portal open at this link, https://www.co.monmouth.nj.us/page.aspx?ID=1932 \n\nClick Schedule a COVID-19 Vaccine and follow the prompts on screen.'
-                imagePath = "Screenshots/Monmouthcapture.png"
-                if time.time() - Tweet_Timer > 150 or Tweet_Timer == 0:
-
-                    print("Appointment found.")
-                    #api.update_with_media(imagePath, status)
-                    Tweet_Timer = time.time()
-                    playsound('Beep.m4a')
+            status = 'Monmouth county residents only: Monmouth County portal open at this link, https://www.co.monmouth.nj.us/page.aspx?ID=1932 \n\nClick Schedule a COVID-19 Vaccine and follow the prompts on screen.'
+            imagePath = "Screenshots/Monmouthcapture.png"
+            
+            print("Portal Open.")
+            api.update_with_media(imagePath, status)
+            break 
  
 
         except:
-            #print("Message not found")
             continue
  
 
