@@ -23,7 +23,10 @@ chrome_options = Options()
 #chrome_options.add_argument('--headless')
 #chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver.maximize_window()
 
 
 
@@ -44,20 +47,29 @@ while True:
         )
 
     except: # Zip code search bar not there -> need to fill out the questionaire
-        # First Page of Forms: Click "NO" on all 3 questions
         first_no_button = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="questionnaire"]/fieldset/section/div[3]/fieldset/div[2]/div[2]')))
-        first_no_button.click()
+        action = webdriver.common.action_chains.ActionChains(driver)
+        action.move_to_element_with_offset(first_no_button, 21, 26).click().perform()
         time.sleep(random.uniform(3,5.3))
+        
         second_no_button = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="questionnaire"]/fieldset/section/div[4]/fieldset/div[2]/div[2]')))
-        second_no_button.click()
-        time.sleep(random.uniform(6,10.7))
+        action = webdriver.common.action_chains.ActionChains(driver)
+        action.move_to_element_with_offset(second_no_button, 41, 6).click().perform()
+        time.sleep(random.uniform(5,10.7))
+
         third_no_button = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="questionnaire"]/fieldset/section/div[5]/fieldset/div[2]/div[2]')))
-        third_no_button.click()
+        action = webdriver.common.action_chains.ActionChains(driver)
+        action.move_to_element_with_offset(third_no_button, 11, 13).click().perform()
         time.sleep(random.uniform(1.4,2.3))
 
         continue_button = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="content"]/div[3]/button')))
-        continue_button.click()
+        action = webdriver.common.action_chains.ActionChains(driver)
+        action.move_to_element_with_offset(continue_button, 163, 19).click().perform()
         time.sleep(random.uniform(9,12))
+
+        # First Page of Forms: Click "NO" on all 3 questions
+"""        
+       
 
         # Second Page of Forms: Click "I need to start vaccination"
         start_vax = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="generic"]/section/div[2]/div/div/div[1]')))
@@ -66,10 +78,10 @@ while True:
 
         continue_scheduling = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//*[@id="content"]/div[3]/button')))
         continue_scheduling.click()
-        time.sleep(random.uniform(3,5))
+        time.sleep(random.uniform(3,5)) 
         
     
-        break
+        break """
         
 
 
