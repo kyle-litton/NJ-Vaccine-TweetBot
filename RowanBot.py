@@ -48,17 +48,12 @@ while True:
         
     except: # Portal is open
         print("portal open")
-        #openingsContainer = WebDriverWait(driver, 2).until(
-        #   EC.presence_of_element_located((By.XPATH, '//*[@id="step-pick-appointment"]/div[3]/div[3]'))
-        #)
-        #openingsContainer.screenshot('Screenshots/RowanCapture.png')
-      
-        #openingsContainer = driver.find_element_by_xpath('//*[@id="step-pick-appointment"]/div[3]/div[3]')
-        openingsContainer = driver.find_element_by_xpath('//*[@id="step-pick-appointment"]/div[3]/div[1]')
-        action = webdriver.common.action_chains.ActionChains(driver)
-        action.move_to_element(openingsContainer).perform()
         time.sleep(random.uniform(1.2,2.3))
-            
+
+        # Scroll to appt table and screenshot for tweet
+        pageBtn = driver.find_element_by_xpath('//*[@id="calendar-prev-next"]')   
+        driver.execute_script("arguments[0].scrollIntoView()", pageBtn)
+
         driver.get_screenshot_as_file("Screenshots/RowanCapture.png")
 
         status = "Rowan: Portal is open at this link https://rowanmedicine.com/vaccine/registration.html"
