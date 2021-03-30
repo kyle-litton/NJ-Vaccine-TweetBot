@@ -51,13 +51,12 @@ while True:
         openingsContainer = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="step-pick-appointment"]/div[3]/div[3]'))
         )
-        openingsContainer.screenshot('Screenshots/Rowanapture.png')
+        openingsContainer.screenshot('Screenshots/RowanCapture.png')
       
         status = "Rowan: Portal is open at this link https://rowanmedicine.com/vaccine/registration.html"
-        imagePath = "Screenshots/Rowancapture.png"
+        imagePath = "Screenshots/RowanCapture.png"
 
-        playsound('Beep.m4a')
-        print("after beep")
+        print("Appointment(s) found.")
         # TODO uncomment once we have it fully working
-        # api.update_with_media(imagePath, status)
+        api.update_with_media(imagePath, status)
         break
