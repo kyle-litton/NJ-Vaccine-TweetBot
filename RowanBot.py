@@ -62,4 +62,6 @@ while True:
         print("Appointment(s) found.")
         # TODO uncomment once we have it fully working
         api.update_with_media(imagePath, status)
+
+        print(len(driver.find_elements_by_class_name('time-selection')))
         break
