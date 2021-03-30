@@ -23,6 +23,8 @@ chrome_options = Options()
 #chrome_options.add_argument('--headless')
 #chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
 
 Tweet_Timer = 0

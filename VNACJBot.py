@@ -57,8 +57,12 @@ url = "https://curogram.com/registrations/5fe2fe643b4a850044b0b3b1"
 
 chrome_options = Options()
 #chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option('useAutomationExtension', False)
 driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
 
+print("Searching for appointments...")
 while True:
 
     try:
@@ -148,10 +152,8 @@ while True:
             status = "VNACJ: Portal is open at this link https://curogram.com/registrations/5fe2fe643b4a850044b0b3b1"
             imagePath = "Screenshots/VNACJcapture.png"
 
-            playsound('Beep.m4a')
-            print("after beep")
-            # TODO uncomment once we have it fully working
-            # api.update_with_media(imagePath, status)
+            api.update_with_media(imagePath, status)
+            print("Appointment(s) found")
             break
         
     except:
