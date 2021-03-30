@@ -20,8 +20,6 @@ api = tweepy.API(auth)
 url = "https://rowanmedicine.com/vaccine/registration.html"
 
 chrome_options = Options()
-#chrome_options.add_argument('--headless')
-#chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
@@ -49,21 +47,21 @@ while True:
         )
         
     except: # Portal is open
-        print("portal open")
         time.sleep(random.uniform(1.2,2.3))
 
         # Scroll to appt table and screenshot for tweet
-        pageBtn = driver.find_element_by_xpath('//*[@id="calendar-prev-next"]')   
+        pageBtn = driver.find_element_by_xpath('//*[@id="step-pick-appointment"]/div[3]')   
         driver.execute_script("arguments[0].scrollIntoView()", pageBtn)
 
         driver.get_screenshot_as_file("Screenshots/RowanCapture.png")
+        numApts = len(driver.find_elements_by_class_name('time-selection'))
 
-        status = "Rowan: Portal is open at this link https://rowanmedicine.com/vaccine/registration.html"
+        status = 'Rowan Medicine:  {0} appointment(s) open at this link https://rowanmedicine.com/vaccine/registration.html'.format(numApts)
         imagePath = "Screenshots/RowanCapture.png"
 
-        print("Appointment(s) found.")
-        # TODO uncomment once we have it fully working
-        api.update_with_media(imagePath, status)
+        if time.time() - Tweet_Timer > 270 or Tweet_Timer == 0:
+            api.update_with_media(imagePath, status)
+            print('{0} Appointment(s) found.'.format(numApts))
+            Tweet_Timer = time.time()
 
-        print(len(driver.find_elements_by_class_name('time-selection')))
-        break
+        continue
