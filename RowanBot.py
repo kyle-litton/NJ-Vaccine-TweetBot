@@ -59,7 +59,7 @@ while True:
         status = 'Rowan Medicine:  {0} appointment(s) open at this link https://rowanmedicine.com/vaccine/registration.html'.format(numApts)
         imagePath = "Screenshots/RowanCapture.png"
 
-        if time.time() - Tweet_Timer > 270 or Tweet_Timer == 0:
+        if (time.time() - Tweet_Timer > 270 or Tweet_Timer == 0) and numApts > 0:
             api.update_with_media(imagePath, status)
             print('{0} Appointment(s) found.'.format(numApts))
             Tweet_Timer = time.time()
