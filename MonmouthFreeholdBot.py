@@ -46,15 +46,15 @@ while True:
         numApts = 0
         while True:
             change_month = driver.find_element_by_xpath('//*[@id="mainContainer"]/div/form/div[6]/div[1]/div/div/div[1]/div[2]')
-            if change_month.get_attribute("class") == 'navigator focusable disabled':
-                break
 
             calendar = driver.find_element_by_xpath('//*[@id="mainContainer"]/div/form/div[6]/div[1]/div/div/div[3]')
             dates = calendar.find_elements_by_tag_name('div')
             for x in dates:
                 if x.get_attribute("class") != 'date empty' and x.get_attribute("class") != 'date circle not-bookable':
                     numApts += 1
-
+                    
+            if change_month.get_attribute("class") == 'navigator focusable disabled':
+                break
             change_month.click()
 
         if numApts > 0:
