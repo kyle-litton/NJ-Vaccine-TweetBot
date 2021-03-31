@@ -58,7 +58,7 @@ while True:
             if change_month.get_attribute("class") == 'navigator focusable disabled':
                 break
             change_month.click()
-'''
+        '''
         if numApts > 0:
             driver.get_screenshot_as_file("Screenshots/MonmouthFreeholdCapture.png")
             status = 'Monmouth County (Freehold):  {0} appointment(s) open at this link https://outlook.office365.com/owa/calendar/MonmouthCountyCOVID19Vaccination@mcsonj.org/bookings/?fbclid=IwAR1gEO6Qrr7GKlf64fNFHu2F9q_Vbdmorm_2IMcigkLIsLfWM-QeM7mfD0o\n\n Double check eligibility first.'.format(numApts)
@@ -68,7 +68,7 @@ while True:
                 api.update_with_media(imagePath, status)
                 print('{0} Appointment(s) found.'.format(numApts))
                 Tweet_Timer = time.time()
-                '''
+        '''
 
     except:
         continue
