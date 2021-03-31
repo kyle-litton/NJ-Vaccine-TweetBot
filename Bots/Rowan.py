@@ -9,7 +9,7 @@ import random
 import time
 import json
 
-key_file = 'keys.json'
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -23,7 +23,7 @@ chrome_options = Options()
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 
 Tweet_Timer = 0
 
@@ -53,11 +53,11 @@ while True:
         pageBtn = driver.find_element_by_xpath('//*[@id="step-pick-appointment"]/div[3]')   
         driver.execute_script("arguments[0].scrollIntoView()", pageBtn)
 
-        driver.get_screenshot_as_file("Screenshots/RowanCapture.png")
+        driver.get_screenshot_as_file("../Screenshots/RowanCapture.png")
         numApts = len(driver.find_elements_by_class_name('time-selection'))
 
         status = 'Rowan Medicine:  {0} appointment(s) open at this link https://rowanmedicine.com/vaccine/registration.html'.format(numApts)
-        imagePath = "Screenshots/RowanCapture.png"
+        imagePath = "../Screenshots/RowanCapture.png"
 
         if (time.time() - Tweet_Timer > 270 or Tweet_Timer == 0) and numApts > 0:
             api.update_with_media(imagePath, status)

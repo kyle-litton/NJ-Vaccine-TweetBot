@@ -9,7 +9,7 @@ import random
 import time
 import json
 
-key_file = 'keys.json'
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -23,7 +23,7 @@ chrome_options = Options()
 #chrome_options.add_argument('--headless')
 #chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 
 Tweet_Timer = 0
 
@@ -54,13 +54,13 @@ while True:
         try:
             msg = driver.find_element_by_xpath('//*[@id="Button1"]')
                      
-            driver.get_screenshot_as_file("Screenshots/Monmouthcapture.png")
+            driver.get_screenshot_as_file("../Screenshots/Monmouthcapture.png")
 
             status = 'Monmouth county residents only: Monmouth County portal open at this link, https://www.co.monmouth.nj.us/page.aspx?ID=1932 \n\nClick Schedule a COVID-19 Vaccine and follow the prompts on screen.'
-            imagePath = "Screenshots/Monmouthcapture.png"
+            imagePath = "../Screenshots/Monmouthcapture.png"
             
             print("Portal Open.")
-            api.update_with_media(imagePath, status)
+            #api.update_with_media(imagePath, status)
             break 
  
 

@@ -9,7 +9,7 @@ import random
 import time
 import json
 
-key_file = 'keys.json'
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -25,7 +25,7 @@ chrome_options = Options()
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 driver.maximize_window()
 
 

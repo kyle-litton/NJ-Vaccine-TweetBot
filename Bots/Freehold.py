@@ -8,7 +8,7 @@ import random
 import time
 import json
 
-key_file = 'keys.json'
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -22,7 +22,7 @@ chrome_options = Options()
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 
 Tweet_Timer = 0
 
@@ -51,7 +51,7 @@ while True:
             for x in dates:
                 if x.get_attribute("class") != 'date empty' and x.get_attribute("class") != 'date circle not-bookable':
                     numApts += 1
-                    driver.get_screenshot_as_file("Screenshots/MonmouthFreeholdCapture.png")
+                    driver.get_screenshot_as_file("../Screenshots/FreeholdCapture.png")
                     break
 
             if change_month.get_attribute("class") == 'navigator focusable disabled':
@@ -59,9 +59,9 @@ while True:
             change_month.click()
         '''
         if numApts > 0:
-            driver.get_screenshot_as_file("Screenshots/MonmouthFreeholdCapture.png")
+            driver.get_screenshot_as_file("../Screenshots/FreeholdCapture.png")
             status = 'Monmouth County (Freehold):  {0} appointment(s) open at this link https://outlook.office365.com/owa/calendar/MonmouthCountyCOVID19Vaccination@mcsonj.org/bookings/?fbclid=IwAR1gEO6Qrr7GKlf64fNFHu2F9q_Vbdmorm_2IMcigkLIsLfWM-QeM7mfD0o\n\n Double check eligibility first.'.format(numApts)
-            imagePath = "Screenshots/RowanCapture.png"
+            imagePath = "../Screenshots/FreeholdCapture.png"
 
             if time.time() - Tweet_Timer > 270 or Tweet_Timer == 0:
                 api.update_with_media(imagePath, status)

@@ -3,7 +3,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from playsound import playsound
 from selenium.webdriver.support.color import Color
 import tweepy
 import random
@@ -45,7 +44,7 @@ def countAppointments(availability_container):
 
 
 
-key_file = 'keys.json'
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -60,7 +59,7 @@ chrome_options = Options()
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 
 print("Searching for appointments...")
 while True:
@@ -140,7 +139,7 @@ while True:
         loc1_openAppts += countAppointments(loc1_availability_container)
         
         if loc1_openAppts > 0:
-            driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
+            driver.get_screenshot_as_file("../Screenshots/VNACJcapture.png")
             screenshot_taken = True
 
         
@@ -172,7 +171,7 @@ while True:
         loc2_openAppts += countAppointments(loc2_availability_container)
 
         if loc2_openAppts > 0 and screenshot_taken == False:
-            driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
+            driver.get_screenshot_as_file("../Screenshots/VNACJcapture.png")
             screenshot_taken = True
 
         
@@ -203,7 +202,7 @@ while True:
         loc3_openAppts += countAppointments(loc3_availability_container)
 
         if loc3_openAppts > 0 and screenshot_taken == False:
-            driver.get_screenshot_as_file("Screenshots/VNACJcapture.png")
+            driver.get_screenshot_as_file("../Screenshots/VNACJcapture.png")
             screenshot_taken = True
  
     except:
@@ -224,7 +223,7 @@ while True:
 
             intro = "VNACJ: {0} appointments open at this link https://curogram.com/registrations/5fe2fe643b4a850044b0b3b1 \n".format(total_appts)
             status = intro + appts_tweet
-            imagePath = "Screenshots/VNACJcapture.png"
+            imagePath = "../Screenshots/VNACJcapture.png"
 
             api.update_with_media(imagePath, status)
             print("Appointment(s) found")

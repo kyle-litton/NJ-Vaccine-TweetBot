@@ -9,7 +9,13 @@ import random
 import time
 import json
 
-key_file = 'keys.json'
+'''
+
+NO LONGER IN USE. Site moved to registration link.
+
+'''
+
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -23,7 +29,7 @@ chrome_options = Options()
 #chrome_options.add_argument('--headless')
 #chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 
 # Set up clear cache
 send_command = ('POST', '/session/$sessionId/chromium/send_command')
@@ -70,8 +76,8 @@ while True:
         slotList = driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/div/div[4]/div/div')
         if slotList.get_attribute("class") == 'slotslist hasScrollIndicator':
  
-            driver.get_screenshot_as_file("Screenshots/HMHNcapture.png")
-            imagePath = "Screenshots/HMHNcapture.png"
+            driver.get_screenshot_as_file("../Screenshots/HMHNcapture.png")
+            imagePath = "../Screenshots/HMHNcapture.png"
             
 
             if time.time() - HMHN_Timer > 240 or HMHN_Timer == 0:
@@ -89,7 +95,6 @@ while True:
                         HMHN_Timer = time.time()
                         api.update_with_media(imagePath, status)
                         print('{0} appointment(s) found.'.format(numAppointments))
-                        playsound('Beep.m4a')
                 else:
                     status = 'Hackensack Meridian: 1 Cancellation found at this link, https://mychart.hmhn.org/MyChart/SignupAndSchedule/EmbeddedSchedule?dept=1110101656&code=njv&vt=112916 \n\nCancellations go VERY quickly, good luck!!'
                     try:
@@ -99,8 +104,7 @@ while True:
                     except:
                         HMHN_Timer = time.time()
                         api.update_with_media(imagePath, status)
-                        print('{0} appointment(s) found.'.format(numAppointments))
-                        playsound('Beep.m4a')    
+                        print('{0} appointment(s) found.'.format(numAppointments))   
 
             continue
         #print("Slotlist has no scroll indicator")

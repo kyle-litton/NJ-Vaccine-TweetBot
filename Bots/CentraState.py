@@ -9,7 +9,7 @@ import random
 import time
 import json
 
-key_file = 'keys.json'
+key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
 
@@ -25,7 +25,7 @@ chrome_options = Options()
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=chrome_options,executable_path='Drivers/chromedriver')
+driver = webdriver.Chrome(options=chrome_options,executable_path='../Drivers/chromedriver')
 
 print("Searching for registration form...")
 while True:
@@ -55,9 +55,9 @@ while True:
             actions.move_to_element(reg_form).perform()
             time.sleep(random.uniform(1.2,2.3))
             
-            driver.get_screenshot_as_file("Screenshots/CentraStateCapture.png")
+            driver.get_screenshot_as_file("../Screenshots/CentraStateCapture.png")
             status = "CentraState (Freehold) Form is open at this link https://centrastatevac.wpengine.com/vaccine-appointment-request/?twid=njv \n\nPay attention to age requirements\nAfter submitting this registration, you should receive a call within a few days to schedule your appointment."
-            imagePath = "Screenshots/CentraStateCapture.png"
+            imagePath = "../Screenshots/CentraStateCapture.png"
 
             # TODO uncomment once we have it fully working
             api.update_with_media(imagePath, status)
