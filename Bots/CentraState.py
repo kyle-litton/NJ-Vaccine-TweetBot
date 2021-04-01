@@ -51,11 +51,9 @@ while True:
         else: # Portal is open
             print("portal open")
             reg_form = driver.find_element_by_xpath('//*[@id="post-69719"]/div/div[2]')
-            action = webdriver.common.action_chains.ActionChains(driver)
-            actions.move_to_element(reg_form).perform()
-            time.sleep(random.uniform(1.2,2.3))
-            
+            driver.execute_script("arguments[0].scrollIntoView()", reg_form)
             driver.get_screenshot_as_file("../Screenshots/CentraStateCapture.png")
+            
             status = "CentraState (Freehold) Form is open at this link https://centrastatevac.wpengine.com/vaccine-appointment-request/?twid=njv \n\nPay attention to age requirements\nAfter submitting this registration, you should receive a call within a few days to schedule your appointment."
             imagePath = "../Screenshots/CentraStateCapture.png"
 
