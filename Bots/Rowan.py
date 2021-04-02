@@ -20,6 +20,8 @@ api = tweepy.API(auth)
 url = "https://rowanmedicine.com/vaccine/registration.html"
 
 chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
@@ -59,7 +61,7 @@ while True:
         status = 'Rowan Medicine:  {0} appointment(s) open at this link https://rowanmedicine.com/vaccine/registration.html'.format(numApts)
         imagePath = "../Screenshots/RowanCapture.png"
 
-        if (time.time() - Tweet_Timer > 270 or Tweet_Timer == 0) and numApts > 0:
+        if (time.time() - Tweet_Timer > 500 or Tweet_Timer == 0) and numApts > 0:
             api.update_with_media(imagePath, status)
             print('{0} Appointment(s) found.'.format(numApts))
             Tweet_Timer = time.time()

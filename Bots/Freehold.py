@@ -52,7 +52,11 @@ while True:
                 if x.get_attribute("class") != 'date empty' and x.get_attribute("class") != 'date circle not-bookable':
                     numApts += 1
                     driver.get_screenshot_as_file("../Screenshots/FreeholdCapture.png")
-                    break
+                    print('Appt found')
+                    print(x.get_attribute("class"))
+                    while True:
+                        time.sleep(100000)
+
 
             if change_month.get_attribute("class") == 'navigator focusable disabled':
                 break

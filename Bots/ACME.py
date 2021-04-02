@@ -1,5 +1,15 @@
 import requests
 from PIL import Image, ImageDraw, ImageFont
+import tweepy
+import json
+
+key_file = '../keys.json'
+with open(key_file) as f:
+    keys = json.load(f)
+
+auth = tweepy.OAuthHandler(keys["consumer_key"], keys["consumer_secret"])
+auth.set_access_token(keys["access_token"], keys["access_token_secret"])
+api = tweepy.API(auth)
 
 headers = {
     'Connection': 'keep-alive',
@@ -25,16 +35,26 @@ data = response.json()
 
 locations = ''
 pic_len = 0
+cur_open = 0
 for x in data:
     if 'NJ' in x['address'] and x['availability'] == 'yes':
-        locations += x['address'] + '\n\n'
-        pic_len += 30
+        store = x['address'].split('-')[1]
+        locations += store + '\n\n'
+        cur_open += 1
+        pic_len += 40
 
-print(locations)
-img = Image.new('RGB', (350, pic_len), color = 'white')
+print(cur_open)
+img = Image.new('RGB', (400, pic_len), color = 'white')
  
 d = ImageDraw.Draw(img)
-font = ImageFont.truetype('../Drivers/Roboto-Black.ttf')
+font = ImageFont.truetype('../Drivers/Roboto-Black.ttf',15)
 d.text((10,10), locations, fill='black',font=font)
  
 img.save('../Screenshots/ACMEcapture.png')
+
+imagePath = '../Screenshots/ACMEcapture.png'
+
+status = '{0} Acme locations are showing some availablity.\n\nCheck here: https://www.mhealthappointments.com/covidappt\n\nIf none are open check back again until it shows none available.'.format(cur_open)
+
+if cur_open > 0:
+    api.update_with_media(imagePath, status)
