@@ -24,11 +24,14 @@ response = requests.get('https://s3-us-west-2.amazonaws.com/mhc.cdn.content/vacc
 data = response.json()
 
 locations = ''
+pic_len = 0
 for x in data:
     if 'NJ' in x['address'] and x['availability'] == 'yes':
-        locations += x['address'] + '\n'
+        locations += x['address'] + '\n\n'
+        pic_len += 30
 
-img = Image.new('RGB', (400, 500), color = 'white')
+print(locations)
+img = Image.new('RGB', (350, pic_len), color = 'white')
  
 d = ImageDraw.Draw(img)
 font = ImageFont.truetype('../Drivers/Roboto-Black.ttf')
