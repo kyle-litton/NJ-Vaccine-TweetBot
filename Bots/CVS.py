@@ -327,7 +327,7 @@ headers = {
     'accept-language': 'en-US,en;q=0.9',
 }
 
-data = '{"requestMetaData":{"appName":"CVS_WEB","lineOfBusiness":"RETAIL","channelName":"WEB","deviceType":"DESKTOP","deviceToken":"7777","apiKey":"a2ff75c6-2da7-4299-929d-d670d827ab4a","source":"ICE_WEB","securityType":"apiKey","responseFormat":"JSON","type":"cn-dep"},"requestPayloadData":{"selectedImmunization":["CVD"],"distanceInMiles":35,"imzData":[{"imzType":"CVD","ndc":["59267100002","59267100003","59676058015","80777027399"],"allocationType":"1"}],"searchCriteria":{"addressLine":"07747"}}}'
+data = '{"requestMetaData":{"appName":"CVS_WEB","lineOfBusiness":"RETAIL","channelName":"WEB","deviceType":"DESKTOP","deviceToken":"7777","apiKey":"a2ff75c6-2da7-4299-929d-d670d827ab4a","source":"ICE_WEB","securityType":"apiKey","responseFormat":"JSON","type":"cn-dep"},"requestPayloadData":{"selectedImmunization":["CVD"],"distanceInMiles":30,"imzData":[{"imzType":"CVD","ndc":["59267100002","59267100003","59676058015","80777027399"],"allocationType":"1"}],"searchCriteria":{"addressLine":"08723"}}}'
 
 while True:
 
@@ -337,9 +337,7 @@ while True:
 
     if response['responseMetaData']['statusDesc'] == 'Success':
         open_appts = response['responsePayloadData']['locations']
-        print('\n')
-        print(open_appts)
-        print('\n')
+
         for x in open_appts:
             print('{0} - {1} - {2}'.format(x['addressCityDescriptionText'],x['addressZipCode'],x['mfrName']))
 
