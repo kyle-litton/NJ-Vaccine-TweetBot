@@ -115,6 +115,6 @@ while True:
 
     if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
         api.update_with_media(imagePath, status)
-        print('{0} stores available'.format(cur_open))
+        print('{0} / {1} stores are showing some availablity.'.format(cur_open, len(nj_stores)))
         Tweet_Timer = time.time()
         lastOpen = cur_open
