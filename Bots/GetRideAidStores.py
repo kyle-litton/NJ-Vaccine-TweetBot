@@ -52,6 +52,6 @@ for x in ['08807','08723','Atlantic City', 'Vineland','Sparta','Hoboken',]:
 
     for x in data:
         if x['state'] == 'NJ':
-            stores.append(str(x['storeNumber']) + ' ' + str(x['city']))
+            stores.append((str(x['storeNumber']), str(x['address']), str(x['city']), str(x['zipcode'])))
 
 print(set(stores))
