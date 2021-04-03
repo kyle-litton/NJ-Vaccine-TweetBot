@@ -6,6 +6,17 @@ import json
 import time
 import random
 
+'''
+
+The below request can be found open to the public on the Rite Aid website.
+When using the scheduler, look at network traffic in the browser.
+Right click on the endpoint request that loads available appointments.
+Choose copy as cURL, then convert to a python request. The cookies may
+expire over time.
+
+'''
+
+
 key_file = '../keys.json'
 with open(key_file) as f:
     keys = json.load(f)
