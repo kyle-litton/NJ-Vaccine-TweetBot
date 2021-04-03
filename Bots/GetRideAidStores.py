@@ -37,7 +37,7 @@ def getStoreInfo():
 
     stores = []
 
-    for x in ['08807','08723','Atlantic City', 'Vineland','Sparta','Hoboken',]:
+    for x in ['08807','08723','Atlantic City', 'Vineland','Sparta','Hoboken','07728','07676','07040','08101',]:
 
 
         params = (
@@ -51,7 +51,25 @@ def getStoreInfo():
 
         data = response.json()['Data']['stores']
 
+        '''
+
+        PREF-113 - Moderna
+        PREF-114 - Pfizer
+        PREF-115 - Johnson & Johnson
+
+        '''
+
         for x in data:
             if x['state'] == 'NJ':
-                stores.append((str(x['storeNumber']), str(x['address']), str(x['city']), str(x['zipcode'])))
-    return set(stores)
+                vaxTypes = x['specialServiceKeys']
+                if 'PREF-113' in vaxTypes:
+                    vax = 'Moderna'
+                elif 'PREF-114' in vaxTypes:
+                    vax = 'Pfizer'
+                elif 'PREF-115' in vaxTypes:
+                    vax = 'Johnson & Johnson'
+                else:
+                    vax = ''
+                stores.append((str(x['storeNumber']), str(x['address']), str(x['city']), str(x['zipcode']), vax))
+    
+    return sorted(set(stores),key=lambda x: x[2])

@@ -73,7 +73,7 @@ while True:
     
     for x in nj_stores:
         
-        store = x[1] + ', ' + x[2] + ' -- ' + x[3] + '\n\n'
+        store = x[1] + ', ' + x[2] + ' -- ' + x[3] + ' -- ' + x[4] + '\n\n'
 
         params = (
             ('storeNumber', x[0]),
@@ -85,9 +85,9 @@ while True:
             data = response.json()['Data']['slots']
         except:
             print('API Timed out')
-            time.sleep(random.uniform(30.8, 45.8))
+            time.sleep(random.uniform(100.4, 180.6))
             continue
-
+        
         if data['1'] == True or data['2'] == True:
             if store not in openLocations:
                 openLocations += store
@@ -101,7 +101,7 @@ while True:
             pic_len -= 40
         
 
-    img = Image.new('RGB', (450, pic_len), color = 'white')
+    img = Image.new('RGB', (550, pic_len), color = 'white')
     
     d = ImageDraw.Draw(img)
     font = ImageFont.truetype('../Drivers/Roboto-Black.ttf',15)
@@ -111,11 +111,10 @@ while True:
 
     imagePath = '../Screenshots/RiteAidcapture.png'
 
-    status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nCheck back later if none are available.'.format(cur_open)
+    status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nThese can be hit or miss, try going through each zipcode from the attached image.'.format(cur_open)
 
     if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
-        #api.update_with_media(imagePath, status)
-        print(status)
-        print('\n')
+        api.update_with_media(imagePath, status)
+        print('{0} stores available'.format(cur_open))
         Tweet_Timer = time.time()
         lastOpen = cur_open
