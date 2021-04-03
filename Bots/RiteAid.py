@@ -34,11 +34,16 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest',
 }
 
-params = (
-    ('storeNumber', '4820'),
-)
+nj_storeNums = ['10488', '4746', '10429', '2518', '4509', '10424', '1796', '3477', '1970', '10517', '10512', '10487', '4812', '10436', '1661', '3427', '425', '3974', '10510', '220', '10496', '1917', '4045', '599', '994', '7935', '1866', '1870', '4819', '1778', '10427', '1736', '116', '2561', '1654', '4821', '407', '10467', '10442', '10463', '7822', '10435', '219']
 
-response = requests.get('https://www.riteaid.com/services/ext/v2/vaccine/checkSlots', headers=headers, params=params, cookies=cookies)
+for x in nj_storeNums:
 
 
-print(response.json())
+    params = (
+        ('storeNumber', x),
+    )
+
+    response = requests.get('https://www.riteaid.com/services/ext/v2/vaccine/checkSlots', headers=headers, params=params, cookies=cookies)
+
+
+    print(response.json()['Data']['slots'])

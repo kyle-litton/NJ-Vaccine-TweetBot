@@ -34,16 +34,24 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest',
 }
 
-params = (
-    ('address', 'Atlantic City'),
-    ('attrFilter', 'PREF-112'),
-    ('fetchMechanismVersion', '2'),
-    ('radius', '50'),
-)
+stores = []
 
-response = requests.get('https://www.riteaid.com/services/ext/v2/stores/getStores', headers=headers, params=params, cookies=cookies)
+for x in ['08807','08723','Atlantic City', 'Vineland','Sparta','Hoboken',]:
 
-data = response.json()['Data']['stores']
 
-for x in data:
-    print('{0} , {1}'.format(x['state'],x['city']))
+    params = (
+        ('address', x),
+        ('attrFilter', 'PREF-112'),
+        ('fetchMechanismVersion', '2'),
+        ('radius', '50'),
+    )
+
+    response = requests.get('https://www.riteaid.com/services/ext/v2/stores/getStores', headers=headers, params=params, cookies=cookies)
+
+    data = response.json()['Data']['stores']
+
+    for x in data:
+        if x['state'] == 'NJ':
+            stores.append(str(x['storeNumber']) + ' ' + str(x['city']))
+
+print(set(stores))
