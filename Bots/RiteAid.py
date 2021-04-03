@@ -53,9 +53,11 @@ openLocations = ''
 Tweet_Timer = 0
 pic_len = 0
 cur_open = 0
+lastOpen = 0
+
 while True:
     newOpenings = False
-    time.sleep(random.uniform(2.4,3.7))
+    time.sleep(random.uniform(2.8,3.7))
     
     for x in nj_storeNums:
         
@@ -93,6 +95,9 @@ while True:
 
     status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nCheck back later if none are available.'.format(cur_open)
 
-    if newOpenings:
-        #api.update_with_media(imagePath, status)
+    if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
+        api.update_with_media(imagePath, status)
         print(status)
+        print('\n')
+        Tweet_Timer = time.time()
+        lastOpen = cur_open

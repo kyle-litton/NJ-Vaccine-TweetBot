@@ -29,7 +29,7 @@ params = (
     ('v', '1617383002336'),
 )
 
-response = requests.get('https://s3-us-west-2.amazonaws.com/mhc.cdn.content/vaccineAvailability.json', headers=headers, params=params)
+#response = requests.get('https://s3-us-west-2.amazonaws.com/mhc.cdn.content/vaccineAvailability.json', headers=headers, params=params)
 
 data = response.json()
 
