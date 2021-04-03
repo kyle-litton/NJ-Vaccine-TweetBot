@@ -56,5 +56,5 @@ imagePath = '../Screenshots/ACMEcapture.png'
 
 status = '{0} Acme locations are showing some availablity.\n\nCheck here: https://www.mhealthappointments.com/covidappt\n\nIf none are open check back again until it shows none available.'.format(cur_open)
 
-if cur_open > 0:
-    api.update_with_media(imagePath, status)
+#if cur_open > 0:
+    #api.update_with_media(imagePath, status)
