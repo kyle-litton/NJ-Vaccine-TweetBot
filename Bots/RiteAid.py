@@ -5,6 +5,7 @@ import tweepy
 import json
 import time
 import random
+from GetRideAidStores import getStoreInfo
 
 '''
 
@@ -58,7 +59,7 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest',
 }
 
-nj_storeNums = [('1661', '2859-61 Kennedy Boulevard', 'Jersey City', '07306'), ('116', '907 North High Street', 'Millville', '08332'), ('10424', '75 South Main Street', 'Neptune', '07753'), ('10488', '970 North Main Road', 'Vineland', '08360'), ('1870', '531 Us Highway 22 East', 'Whitehouse Station', '08889'), ('1970', '431 Haledon Avenue', 'Haledon', '07508'), ('2561', '332 Raritan Avenue', 'Highland Park', '08904'), ('4819', '1881 North Black Horse Pike', 'Williamstown', '08094'), ('7822', '2791 S Delsea Drive', 'Vineland', '08360'), ('1654', '5 Lafayette Road', 'Fords', '08863'), ('10496', '1 North New Prospect Road', 'Jackson', '08527'), ('4821', '10 Lincoln Highway', 'Edison', '08820'), ('10435', '213 South Street', 'Morristown', '07960'), ('2518', '159 East Kennedy Boulevard', 'Lakewood', '08701'), ('7935', '416 Route 1', 'Edison', '08817'), ('3974', '1041 Burnt Tavern Road', 'Brick', '08724'), ('10442', '695 North Delsea Drive', 'Glassboro', '08028'), ('219', '123 East Main Street Suite 16', 'Denville', '07834'), ('10427', '151 Route 94', 'Blairstown', '07825'), ('3427', '237 Spring Street', 'Newton', '07860'), ('4509', '353 Us Highway 202/206', 'Bridgewater', '08807'), ('4812', '981 West Side Avenue', 'Jersey City', '07306'), ('10436', '186 South White Horse Pike', 'Berlin', '08009'), ('4045', '1434 S Black Horse Pike', 'Williamstown', '08094'), ('3477', '773 Hamilton Street', 'Somerset', '08873'), ('10429', '203 Mountain Avenue', 'Hackettstown', '07840'), ('220', '2 Upper Sarepta Road', 'Belvidere', '07823'), ('425', '3258 Bridge Avenue', 'Point Pleasant', '08742'), ('1736', '1366 Clifton Avenue', 'Clifton', '07012'), ('4746', '132 North Gaston Avenue', 'Somerville', '08876'), ('10467', '677 Cross Keys Road', 'Sicklerville', '08081'), ('10463', '403 Sicklerville Road', 'Sicklerville', '08081'), ('1796', '4057 Asbury Ave Ste 8', 'Tinton Falls', '07753'), ('10487', '7 West Landis Avenue', 'Vineland', '08360'), ('1866', '375  White Horse Pike', 'Atco', '08004'), ('10512', '811 Fischer Boulevard', 'Toms River', '08753'), ('10517', '86  B Lacey Road', 'Whiting', '08759'), ('994', '480 North Beverwyck Road', 'Lake Hiawatha', '07034'), ('1917', '236 South Delsea Drive', 'Clayton', '08312'), ('599', '841 Georges Road', 'North Brunswick', '08902'), ('407', '366 George Street', 'New Brunswick', '08901'), ('10510', '149 Main Street', 'Manasquan', '08736'), ('1778', '596 Shrewsbury Avenue', 'Tinton Falls', '07701')]
+nj_stores = getStoreInfo()
 
 openLocations = ''
 Tweet_Timer = 0
@@ -68,9 +69,9 @@ lastOpen = 0
 
 while True:
     newOpenings = False
-    time.sleep(random.uniform(2.8,3.7))
+    time.sleep(random.uniform(4.8,5.7))
     
-    for x in nj_storeNums:
+    for x in nj_stores:
         
         store = x[1] + ', ' + x[2] + ' -- ' + x[3] + '\n\n'
 
@@ -79,7 +80,13 @@ while True:
         )
 
         response = requests.get('https://www.riteaid.com/services/ext/v2/vaccine/checkSlots', headers=headers, params=params, cookies=cookies)
-        data = response.json()['Data']['slots']
+        
+        try:
+            data = response.json()['Data']['slots']
+        except:
+            print('API Timed out')
+            time.sleep(random.uniform(30.8, 45.8))
+            continue
 
         if data['1'] == True or data['2'] == True:
             if store not in openLocations:
@@ -107,7 +114,7 @@ while True:
     status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nCheck back later if none are available.'.format(cur_open)
 
     if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
-        api.update_with_media(imagePath, status)
+        #api.update_with_media(imagePath, status)
         print(status)
         print('\n')
         Tweet_Timer = time.time()
