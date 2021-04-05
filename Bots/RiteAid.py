@@ -67,54 +67,58 @@ pic_len = 0
 cur_open = 0
 lastOpen = 0
 
-while True:
-    newOpenings = False
-    time.sleep(random.uniform(4.8,5.7))
+
+newOpenings = False
+
+for x in nj_stores:
     
-    for x in nj_stores:
-        
-        store = x[1] + ', ' + x[2] + ' -- ' + x[3] + ' -- ' + x[4] + '\n\n'
+    store = x[1] + ', ' + x[2] + ' -- ' + x[3] + ' -- ' + x[4] + '\n\n'
 
-        params = (
-            ('storeNumber', x[0]),
-        )
+    params = (
+        ('storeNumber', x[0]),
+    )
 
-        response = requests.get('https://www.riteaid.com/services/ext/v2/vaccine/checkSlots', headers=headers, params=params, cookies=cookies)
+    response = requests.get('https://www.riteaid.com/services/ext/v2/vaccine/checkSlots', headers=headers, params=params, cookies=cookies)
+
+    try:
+        data = response.json()['Data']['slots']
+    except:
+        print('API Timed out')
+        time.sleep(random.uniform(100.4, 180.6))
+        continue
+    
+    if data['1'] == True or data['2'] == True:
+        if store not in openLocations:
+            openLocations += store
+            cur_open += 1
+            pic_len += 40
+            newOpenings = True
+            
+    elif store in openLocations:
+        openLocations = openLocations.replace(store, '')
+        cur_open -= 1
+        pic_len -= 40
         
-        try:
-            data = response.json()['Data']['slots']
-        except:
-            print('API Timed out')
-            time.sleep(random.uniform(100.4, 180.6))
-            continue
-        
-        if data['1'] == True or data['2'] == True:
-            if store not in openLocations:
-                openLocations += store
-                cur_open += 1
-                pic_len += 40
-                newOpenings = True
-                
-        elif store in openLocations:
-            openLocations = openLocations.replace(store, '')
-            cur_open -= 1
-            pic_len -= 40
-        
+
+if openLocations != '':
 
     img = Image.new('RGB', (550, pic_len), color = 'white')
-    
+
     d = ImageDraw.Draw(img)
     font = ImageFont.truetype('../Drivers/Roboto-Black.ttf',15)
     d.text((10,10), openLocations, fill='black',font=font)
-    
+
     img.save('../Screenshots/RiteAidcapture.png')
 
     imagePath = '../Screenshots/RiteAidcapture.png'
 
     status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nThese can be hit or miss, try going through each zipcode from the attached image.'.format(cur_open)
-
+    print(openLocations)
     if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
         #api.update_with_media(imagePath, status)
         print('{0} / {1} stores are showing some availablity.'.format(cur_open, len(nj_stores)))
         Tweet_Timer = time.time()
         lastOpen = cur_open
+
+else:
+    print('No stores are open.')
