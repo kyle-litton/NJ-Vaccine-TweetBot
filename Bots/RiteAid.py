@@ -1,11 +1,11 @@
 import os
 import requests
-from PIL import Image, ImageDraw, ImageFont
 import tweepy
 import json
 import time
 import random
-from GetRideAidStores import getStoreInfo
+from Utils.GetRideAidStores import getStoreInfo
+from Utils.CreatePhoto import build
 
 '''
 
@@ -99,23 +99,15 @@ for x in nj_stores:
         cur_open -= 1
         pic_len -= 40
         
-
 if openLocations != '':
 
-    img = Image.new('RGB', (550, pic_len), color = 'white')
-
-    d = ImageDraw.Draw(img)
-    font = ImageFont.truetype('../Drivers/Roboto-Black.ttf',15)
-    d.text((10,10), openLocations, fill='black',font=font)
-
-    img.save('../Screenshots/RiteAidcapture.png')
-
-    imagePath = '../Screenshots/RiteAidcapture.png'
+    imagePath = build(openLocations, pic_len, '../Screenshots/RiteAidcapture.png')
 
     status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nThese can be hit or miss, try going through each zipcode from the attached image.'.format(cur_open)
-    print(openLocations)
+
     if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
         #api.update_with_media(imagePath, status)
+        print(openLocations)
         print('{0} / {1} stores are showing some availablity.'.format(cur_open, len(nj_stores)))
         Tweet_Timer = time.time()
         lastOpen = cur_open
