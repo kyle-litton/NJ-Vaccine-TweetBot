@@ -60,7 +60,7 @@ while True:
             imagePath = "../Screenshots/Monmouthcapture.png"
             
             print("Portal Open.")
-            #api.update_with_media(imagePath, status)
+            api.update_with_media(imagePath, status)
             break 
  
 

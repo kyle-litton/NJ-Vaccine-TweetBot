@@ -20,6 +20,8 @@ api = tweepy.API(auth)
 url = "https://centrastatevac.wpengine.com/vaccine-appointment-request/?twid=njv"
 
 chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument("--window-size=1200,824")
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
