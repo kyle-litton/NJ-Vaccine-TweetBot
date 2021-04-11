@@ -16,7 +16,9 @@ _____________________________________________________
     VNACJ - We have this working well, working on counting all open appointments at multiple locations. This opens a few times per week.
 _____________________________________________________
 ### **Being Updated**
-    Rowan -  Has been working but site seems to have changed.
+    Costco - Just opened for the first time, we are working on it.
+
+    Rowan -  Appointments are sitting for a while now, too many tweets.
 
     Freehold - Rarely has new appointments.
 

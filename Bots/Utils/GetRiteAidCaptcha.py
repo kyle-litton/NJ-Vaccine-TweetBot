@@ -7,7 +7,7 @@ logging.getLogger('harvester').setLevel(logging.CRITICAL)
 
 harvester = Harvester('127.0.0.1',1999)
 
-tokens = harvester.intercept_recaptcha_v3(domain='riteaid.com', sitekey='6LcsQtQUAAAAAAvgAsY9ZxCFE9I-hkK2k36Igdme',action='reload')
+tokens = harvester.intercept_recaptcha_v3(domain='riteaid.com', sitekey='6LcsQtQUAAAAAAvgAsY9ZxCFE9I-hkK2k36Igdme')
 
 server_thread = Thread(target=harvester.serve, daemon=True)
 server_thread.start()

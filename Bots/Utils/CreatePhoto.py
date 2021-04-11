@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
-def build(openLocations,pic_len,path):
-    img = Image.new('RGB', (550, pic_len), color = 'white')
+def build(openLocations,pic_width,pic_len,path):
+    img = Image.new('RGB', (pic_width, pic_len), color = 'white')
 
     d = ImageDraw.Draw(img)
     font = ImageFont.truetype('../Drivers/Roboto-Black.ttf',15)
