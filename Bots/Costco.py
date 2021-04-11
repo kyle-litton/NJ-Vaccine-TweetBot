@@ -33,25 +33,30 @@ print('Searching for any open appointments...')
 while True:
 
     openStores = 0
-    for x in tqdm(stores):
-        eId = getEiD(x[0])
-        vaxInfo = getVaccineType(x[0],eId)
+    for store in tqdm(stores):
+        eId = getEiD(store[0])
+        vaxInfo = getVaccineType(store[0],eId)
         slots = getTimeSlots(eId,vaxInfo[0])
         available = 0
         if len(slots) > 0:
             openStores += 1
-            for i in range(len(slots)):
-                print(slots)
-                totalSpots = slots[i]['timeSlots']['numberOfSpots']
-                takenSpots = slots[i]['timeSlots']['numberOfSpotsTaken']
-                available += totalSpots - takenSpots
-                pic_len += 40
-                openLocations += x[1] + ', ' + x[2] + ':  (' + str(available) + ' available appointments) : ' + vaxInfo[1] + '\n\n'
-                total += available
+
+            # iterate through every available day at this location
+            for key in slots.keys():
+                totalSpots = slots[key]['timeSlots']['numberOfSpots']
+                takenSpots = slots[key]['timeSlots']['numberOfSpotsTaken']
+
+                for x in range(len(totalSpots)):
+                    available += totalSpots[x] - takenSpots[x]
+            total += available
+
+            pic_len += 40
+            openLocations += store[1] + ', ' + store[2] + ':  (' + str(available) + ' available appointments) : ' + vaxInfo[1] + '\n\n'
+
 
     if total > 0 and openLocations != '':
         imagePath = build(openLocations,750, pic_len, '../Screenshots/CostcoCapture.png')
-        status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book.appointment-plus.com/d138ktz8/#/'.format(len(openStores),total)
+        status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book.appointment-plus.com/d138ktz8/#/'.format(openStores,total)
 
         api.update_with_media(imagePath, status)
         print(status)
