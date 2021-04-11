@@ -50,7 +50,7 @@ while True:
                     available += totalSpots[x] - takenSpots[x]
             total += available
 
-            pic_len += 40
+            pic_len += 45
             openLocations += store[1] + ', ' + store[2] + ':  (' + str(available) + ' available appointments) : ' + vaxInfo[1] + '\n\n'
 
 
