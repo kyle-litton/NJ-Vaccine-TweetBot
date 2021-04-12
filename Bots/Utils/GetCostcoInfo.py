@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 def getCostcoStores():
         
@@ -133,9 +134,12 @@ def getTimeSlots(eId, vaxCode):
         'X-Requested-With': 'XMLHttpRequest',
     }
 
+    endTime = datetime.now() + relativedelta(months=+1)
+    endTime = endTime.strftime("%Y-%m-%d %H:%M:%S")
+
     params = (
         ('startTimestamp', datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
-        ('endTimestamp', '2021-05-09 00:00:00'),
+        ('endTimestamp', endTime),
         ('limitNumberOfDaysWithOpenSlots', '3'),
         ('employeeId', eId),
         ('services[]', vaxCode),

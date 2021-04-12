@@ -34,9 +34,11 @@ while True:
 
     openStores = 0
     for store in tqdm(stores):
+        
         eId = getEiD(store[0])
         vaxInfo = getVaccineType(store[0],eId)
         slots = getTimeSlots(eId,vaxInfo[0])
+
         available = 0
         if len(slots) > 0:
             openStores += 1
@@ -46,8 +48,8 @@ while True:
                 totalSpots = slots[key]['timeSlots']['numberOfSpots']
                 takenSpots = slots[key]['timeSlots']['numberOfSpotsTaken']
 
-                for x in range(len(totalSpots)):
-                    available += totalSpots[x] - takenSpots[x]
+                for i in range(len(totalSpots)):
+                    available += totalSpots[i] - takenSpots[i]
             total += available
 
             pic_len += 45
@@ -55,8 +57,8 @@ while True:
 
 
     if total > 0 and openLocations != '':
-        imagePath = build(openLocations,750, pic_len, '../Screenshots/CostcoCapture.png')
-        status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book.appointment-plus.com/d138ktz8/#/'.format(openStores,total)
+        imagePath = build(openLocations, 750, pic_len, '../Screenshots/CostcoCapture.png')
+        status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book.appointment-plus.com/d138ktz8/#/\n\nRefer to the attached photo for details on locations, availablity, and vaccine type.'.format(openStores,total)
 
         api.update_with_media(imagePath, status)
         print(status)
