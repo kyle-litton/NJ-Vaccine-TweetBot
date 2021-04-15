@@ -95,11 +95,14 @@ while True:
 
     # Case 1: Location menu shows up, more than one location is open
     try:
-        loc1_name = driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-locations/div/div[2]/div[3]/div[1]/div[1]').text
+        loc1 = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-locations/div/div[2]/div[3]/div[1]/div[1]'))
+        )
+        loc1_name = loc1.text
         location_1_button =  driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-locations/div/div[2]/div[3]')
         location_1_button.click()
         time.sleep(random.uniform(1.4,2.3))
-
+     
         screenshot_taken = False
         loc1_openAppts = 0
         loc1_availability_container = driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]')
@@ -145,8 +148,10 @@ while True:
         loc2_dropdown.click()
         time.sleep(random.uniform(0.3,0.7))
         
-        # TODO switch this to get name from sidebar
-        loc2_name = driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/div[2]/ng-select/ng-dropdown-panel/div/div[2]/div[2]/span').text
+        loc2 = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[1]/curo-appointment-info/div[1]/div[2]'))
+        )
+        loc2_name = loc2.text
 
         loc2_availability_container = driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]')
         loc2_openAppts += countAppointments(loc2_availability_container)
@@ -169,8 +174,11 @@ while True:
         loc3_dropdown.click()
         time.sleep(random.uniform(0.3,0.7))
 
-        #TODO update with sidebar name
-        loc3_name = driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/div[2]/ng-select/ng-dropdown-panel/div/div[2]/div[1]/span').text
+        loc3 = WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, '/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[1]/curo-appointment-info/div[1]/div[2]'))
+        )
+        loc3_name = loc3.text
+        
         loc3_availability_container = driver.find_element_by_xpath('/html/body/curo-root/curo-intel-widget-layout/div/curo-registrations/curo-registration-steps/div/div/div/div[2]/curo-patient-registration/curo-availabilities/section/div[2]')
         loc3_openAppts += countAppointments(loc3_availability_container)
 
