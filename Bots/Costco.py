@@ -27,6 +27,8 @@ api = tweepy.API(auth)
 total = 0
 pic_len = 0
 openLocations = ''
+
+print('Getting store information...')
 stores = getCostcoStores()
 
 print('Searching for any open appointments...')
@@ -34,13 +36,21 @@ while True:
 
     openStores = 0
     for store in tqdm(stores):
+        try:
+            eId = store[3]
+            vaxInfo = getVaccineType(store[0],eId,store[4])
+            slots = getTimeSlots(eId,vaxInfo[0],store[4])
+        except:
+            print('Error getting data for {0}'.format(store[1]))
+            continue
         
-        eId = getEiD(store[0])
-        vaxInfo = getVaccineType(store[0],eId)
-        slots = getTimeSlots(eId,vaxInfo[0])
+        # Filter out J&J while CDC has it paused
+        if vaxInfo[0] == 57:
+            continue
 
         available = 0
         if len(slots) > 0:
+            print(store)
             openStores += 1
 
             # iterate through every available day at this location
@@ -50,18 +60,22 @@ while True:
 
                 for i in range(len(totalSpots)):
                     available += totalSpots[i] - takenSpots[i]
+            print('{0} available.'.format(available))
             total += available
 
             pic_len += 45
             openLocations += store[1] + ', ' + store[2] + ':  (' + str(available) + ' available appointments) : ' + vaxInfo[1] + '\n\n'
 
 
-    if total > 0 and openLocations != '':
+    if total > 3 and openLocations != '':
         imagePath = build(openLocations, 750, pic_len, '../Screenshots/CostcoCapture.png')
-        status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book.appointment-plus.com/d138ktz8/#/\n\nRefer to the attached photo for details on locations, availablity, and vaccine type.'.format(openStores,total)
+        status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book-costcopharmacy.appointment-plus.com/d133yng2#/\n\nRefer to the attached photo for details on locations, availablity, and vaccine type.'.format(openStores,total)
 
         api.update_with_media(imagePath, status)
         print(status)
         exit()
+    
+    openLocations = ''
+    total = 0
 
     time.sleep(random.uniform(8.4, 15.6))

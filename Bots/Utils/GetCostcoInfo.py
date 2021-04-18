@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from tqdm import tqdm
 
 def getCostcoStores():
         
@@ -25,7 +26,7 @@ def getCostcoStores():
 
 
         params = (
-            ('clientMasterId', '426269'),
+            ('clientMasterId', '426227'),
             ('pageNumber', page),
             ('itemsPerPage', '10'),
             ('keyword', ''),
@@ -45,13 +46,14 @@ def getCostcoStores():
 
         data = response.json()['clientObjects']
 
-        for store in data:
+        for store in tqdm(data):
             if store['state'] == 'NJ':
-                storeInfo.append((str(store['id']),str(store['address1']),str(store['city'])))
-        
+                eId = getEiD(str(store['id']),str(store['clientMasterId']))
+                storeInfo.append((str(store['id']),str(store['address1']),str(store['city']),str(eId),str(store['clientMasterId'])))
+
     return storeInfo
 
-def getVaccineType(storeId,eId):
+def getVaccineType(storeId,eId,cId):
     cookies = {
     'sess_prod-spark-ap': 'eyJpdiI6IklZNVVqVG1oWldCbjBKYWhXcUJrXC93PT0iLCJ2YWx1ZSI6Ik5RUWFyRjFQalI2ZDhPdXBXSGdCQVVTdUNLYU1mN1QzUUZicHd5N1lJdGdLcjhsbVdnbEl5dnhaZ1wvZTluUFdRUlFHeERITGRSQTFHVUpjblBSWGp2QT09IiwibWFjIjoiYzFlOWFjYjYxZTFiYjUyNTk2YWZjNGNjNzI1OGIwZDE2ZDBlY2ZlYzEyOTgzYTNiOGE0NzgzYTE4ZmM5YmI1NCJ9',
     }
@@ -68,7 +70,7 @@ def getVaccineType(storeId,eId):
     }
 
     params = (
-        ('clientMasterId', '426659'),
+        ('clientMasterId', cId),
         ('clientId', storeId),
         ('pageNumber', '1'),
         ('itemsPerPage', '10'),
@@ -84,7 +86,7 @@ def getVaccineType(storeId,eId):
     VaccineName = data[0]['serviceDetails']['title']
     return (VaccineId,VaccineName)
 
-def getEiD(storeId):
+def getEiD(storeId,cId):
     # 'Employee Id' used in finding open appointments, not sure why they named it that
     # Seems like they have one default per store. 
 
@@ -104,7 +106,7 @@ def getEiD(storeId):
     }
 
     params = (
-        ('clientMasterId', '426659'),
+        ('clientMasterId', cId),
         ('clientId', storeId),
         ('pageNumber', '1'),
         ('itemsPerPage', '10'),
@@ -118,7 +120,7 @@ def getEiD(storeId):
     data = data['employeeObjects']
     return str(data[0]['id'])
 
-def getTimeSlots(eId, vaxCode):
+def getTimeSlots(eId, vaxCode, cId):
     cookies = {
     'sess_prod-spark-ap': 'eyJpdiI6InFqbnpXK1I0c0I3Q1wvT09yV3lkcXhBPT0iLCJ2YWx1ZSI6ImNUR1VndHJOUkJLc1BtTmQ5Z0Q0dVJzVks3eXc0bEl0TVgwcERVaXRuWGRpWjVrQlRIQXc4NldheXBXYld3MkpFbFM2XC9kYjk2c2k4QzdMRkdDQjlqdz09IiwibWFjIjoiMTYwNDdkYzk1MDUwMzg2MDZjZTg5ZjgyMjg0ZmNmZmIzMTQzZjhkMDU4ZjdhN2QzZDNlYjg4OTIyOWUxODE4MSJ9',
     }
@@ -145,7 +147,7 @@ def getTimeSlots(eId, vaxCode):
         ('services[]', vaxCode),
         ('numberOfSpotsNeeded', '1'),
         ('isStoreHours', 'true'),
-        ('clientMasterId', '426679'),
+        ('clientMasterId', cId),
         ('toTimeZone', 'false'),
         ('fromTimeZone', '149'),
         ('_', '1617995992649'),
