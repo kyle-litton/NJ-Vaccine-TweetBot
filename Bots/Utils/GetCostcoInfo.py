@@ -49,7 +49,8 @@ def getCostcoStores():
         for store in tqdm(data):
             if store['state'] == 'NJ':
                 eId = getEiD(str(store['id']),str(store['clientMasterId']))
-                storeInfo.append((str(store['id']),str(store['address1']),str(store['city']),str(eId),str(store['clientMasterId'])))
+                if eId != 'Error':
+                    storeInfo.append((str(store['id']),str(store['address1']),str(store['city']),str(eId),str(store['clientMasterId'])))
 
     return storeInfo
 
@@ -117,8 +118,13 @@ def getEiD(storeId,cId):
 
     response = requests.get('https://book.appointment-plus.com/book-appointment/get-employees', headers=headers, params=params, cookies=cookies)
     data = response.json()
+    
     data = data['employeeObjects']
-    return str(data[0]['id'])
+
+    try:
+        return str(data[0]['id'])
+    except:
+        return 'Error'
 
 def getTimeSlots(eId, vaxCode, cId):
     cookies = {

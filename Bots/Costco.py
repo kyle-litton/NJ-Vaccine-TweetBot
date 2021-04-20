@@ -30,7 +30,7 @@ openLocations = ''
 
 print('Getting store information...')
 stores = getCostcoStores()
-
+print(stores)
 print('Searching for any open appointments...')
 while True:
 
@@ -71,7 +71,7 @@ while True:
         imagePath = build(openLocations, 750, pic_len, '../Screenshots/CostcoCapture.png')
         status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book-costcopharmacy.appointment-plus.com/d133yng2#/\n\nRefer to the attached photo for details on locations, availablity, and vaccine type.'.format(openStores,total)
 
-        api.update_with_media(imagePath, status)
+        #api.update_with_media(imagePath, status)
         print(status)
         exit()
     
