@@ -121,7 +121,7 @@ if openLocations != '':
     status = '{0} Rite Aid locations are showing some availablity.\n\nCheck here: https://www.riteaid.com/covid-vaccine-apt\n\nThese can be hit or miss, try going through each zipcode from the attached image.'.format(cur_open)
 
     if (time.time() - Tweet_Timer > 250 or Tweet_Timer == 0 or cur_open > lastOpen+3) and newOpenings == True:
-        api.update_with_media(imagePath, status)
+        #api.update_with_media(imagePath, status)
         print(openLocations)
         print('{0} / {1} stores are showing some availablity.'.format(cur_open, len(nj_stores)))
         Tweet_Timer = time.time()
