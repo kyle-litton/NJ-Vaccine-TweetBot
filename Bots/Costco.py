@@ -43,14 +43,11 @@ while True:
         except:
             print('Error getting data for {0}'.format(store[1]))
             continue
-        
-        # Filter out J&J while CDC has it paused
-        if vaxInfo[0] == 57:
-            continue
 
         available = 0
         if len(slots) > 0:
             print(store)
+            print(vaxInfo)
             openStores += 1
 
             # iterate through every available day at this location
@@ -71,7 +68,7 @@ while True:
         imagePath = build(openLocations, 750, pic_len, '../Screenshots/CostcoCapture.png')
         status = '{0} Costco location(s) showing a total of {1} appointment(s) available.\n\nCheck here: https://book-costcopharmacy.appointment-plus.com/d133yng2#/\n\nRefer to the attached photo for details on locations, availablity, and vaccine type.'.format(openStores,total)
 
-        #api.update_with_media(imagePath, status)
+        api.update_with_media(imagePath, status)
         print(status)
         exit()
     
